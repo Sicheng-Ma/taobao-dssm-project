@@ -5,12 +5,12 @@ import os
 # --- 常量定义 ---
 
 # 1. 文件路径
-# 在Kaggle环境中，输入路径通常是固定的
+# Kaggle环境输入路径
 DATASET_FOLDER_NAME = 'ad-displayclick-data-on-taobao-com-cheneymaaa'
 # 我们在主Notebook中动态生成这个路径，这里只定义文件夹名
 # DATA_PATH = f'../input/{DATASET_FOLDER_NAME}/' 
 
-# 所有中间和最终文件都将保存在Kaggle的输出目录
+# 保存在Kaggle的输出目录
 OUTPUT_DIR = '/kaggle/working/'
 
 # 2. 超参数
