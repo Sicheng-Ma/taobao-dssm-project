@@ -5,19 +5,19 @@ import os
 # --- 常量定义 ---
 
 # 1. 文件路径
-# Kaggle环境输入路径
+# 在Kaggle环境中，输入路径通常是固定的
 DATASET_FOLDER_NAME = 'ad-displayclick-data-on-taobao-com-cheneymaaa'
 # 我们在主Notebook中动态生成这个路径，这里只定义文件夹名
 # DATA_PATH = f'../input/{DATASET_FOLDER_NAME}/' 
 
-# 保存在Kaggle的输出目录
+# 所有中间和最终文件都将保存在Kaggle的输出目录
 OUTPUT_DIR = '/kaggle/working/'
 
 # 2. 超参数
 CHUNKSIZE = 2_000_000  # 每次处理200万行
 NEG_POS_RATIO = 4      # 负样本与正样本的比例
-EMBEDDING_DIM = 32     # Embedding维度 (从16增加到32)
-DNN_UNITS = [512, 256, 128] # DNN层级 - 金字塔结构，最终128维
+EMBEDDING_DIM = 16     # Embedding维度
+DNN_UNITS = [128, 64, 32] # DNN层级
 TEMP = 1.0             # 余弦相似度温度系数
 LEARNING_RATE = 0.001
 BATCH_SIZE = 4096

@@ -31,71 +31,29 @@ class DNN(tf.keras.layers.Layer):
     
     Args:
         hidden_units: List of hidden layer dimensions
-        activation: Activation function for hidden layers ('relu', 'gelu', 'swish')
+        activation: Activation function for hidden layers
         l2_reg: L2 regularization coefficient
         dropout_rate: Dropout rate for regularization
-        use_batch_norm: Whether to use batch normalization
     """
     
     def __init__(self, hidden_units: List[int], activation: str = 'relu', 
-                 l2_reg: float = 1e-4, dropout_rate: float = 0.3, 
-                 use_batch_norm: bool = True, **kwargs):
+                 l2_reg: float = 1e-4, dropout_rate: float = 0.3, **kwargs):
         super(DNN, self).__init__(**kwargs)
-        
-        # 选择激活函数
-        if activation == 'gelu':
-            activation_fn = tf.nn.gelu
-        elif activation == 'swish':
-            activation_fn = tf.nn.swish
-        else:
-            activation_fn = 'relu'
-        
-        self.dnn_layers = []
-        self.batch_norm_layers = []
-        self.dropout_layers = []
-        
-        for i, units in enumerate(hidden_units):
-            # 全连接层
-            dense_layer = tf.keras.layers.Dense(
+        self.dnn_layers = [
+            tf.keras.layers.Dense(
                 units, 
-                activation=None,  # 不使用激活函数，在BatchNorm后添加
-                kernel_regularizer=tf.keras.regularizers.l2(l2_reg),
-                name=f"dense_{i}"
-            )
-            self.dnn_layers.append(dense_layer)
-            
-            # BatchNorm层
-            if use_batch_norm:
-                bn_layer = tf.keras.layers.BatchNormalization(name=f"bn_{i}")
-                self.batch_norm_layers.append(bn_layer)
-            else:
-                self.batch_norm_layers.append(None)
-            
-            # Dropout层
-            dropout_layer = tf.keras.layers.Dropout(dropout_rate, name=f"dropout_{i}")
-            self.dropout_layers.append(dropout_layer)
-        
-        self.activation_fn = activation_fn
-        self.use_batch_norm = use_batch_norm
+                activation=activation, 
+                kernel_regularizer=tf.keras.regularizers.l2(l2_reg)
+            ) for units in hidden_units
+        ]
+        self.dropout_layers = [tf.keras.layers.Dropout(dropout_rate) for _ in hidden_units]
     
     def call(self, inputs, training=None):
         """Forward pass through the DNN."""
         x = inputs
         for i in range(len(self.dnn_layers)):
-            # 全连接层
             x = self.dnn_layers[i](x)
-            
-            # BatchNorm
-            if self.use_batch_norm and self.batch_norm_layers[i] is not None:
-                x = self.batch_norm_layers[i](x, training=training)
-            
-            # 激活函数
-            if callable(self.activation_fn):
-                x = self.activation_fn(x)
-            
-            # Dropout
             x = self.dropout_layers[i](x, training=training) 
-        
         return x
 
 
@@ -114,8 +72,8 @@ class CosinSimilarity(tf.keras.layers.Layer):
     def call(self, inputs: Tuple[tf.Tensor, tf.Tensor]) -> tf.Tensor:
         """Compute cosine similarity between user and item embeddings."""
         user_emb, item_emb = inputs
-        user_emb_norm = tf.nn.l2_normalize(user_emb, axis=1) # 用户embedding L2归一化
-        item_emb_norm = tf.nn.l2_normalize(item_emb, axis=1) # 物品embedding L2归一化
+        user_emb_norm = tf.nn.l2_normalize(user_emb, axis=1)
+        item_emb_norm = tf.nn.l2_normalize(item_emb, axis=1)
         dot_product = tf.reduce_sum(
             tf.multiply(user_emb_norm, item_emb_norm), 
             axis=1, 
