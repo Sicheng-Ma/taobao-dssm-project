@@ -21,7 +21,6 @@ import sys
 sys.path.append('..')
 from configs.sampling_config import (
     DATASET_FOLDER_NAME, 
-    OUTPUT_DIR, 
     SAMPLE_RATIO,
     SAMPLE_CHUNKSIZE
 )
@@ -30,9 +29,33 @@ from configs.sampling_config import (
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Configuration
+# ==================== 配置参数 ====================
 TEST_DATE = 20170513
 RANDOM_SEED = 42
+
+# ==================== 路径配置 ====================
+# 本地采样路径配置
+LOCAL_DATA_PATH = '/Users/masicheng/Desktop/搜广推/taobao-dssm-project/data'
+LOCAL_OUTPUT_DIR = '/Users/masicheng/Desktop/搜广推/taobao-dssm-project/outputs'
+
+# 云端采样路径配置
+CLOUD_DATA_PATH = './data'
+CLOUD_OUTPUT_DIR = './outputs'
+
+    # ==================== 路径切换说明 ====================
+    # 本地采样（快速验证）：
+    # DATA_PATH = LOCAL_DATA_PATH
+    # OUTPUT_DIR = LOCAL_OUTPUT_DIR
+    # 用途：快速生成采样数据用于本地训练验证
+    
+    # 云端采样（生产环境）：
+    # DATA_PATH = CLOUD_DATA_PATH
+    # OUTPUT_DIR = CLOUD_OUTPUT_DIR
+    # 用途：在云端环境生成采样数据
+    
+# 当前使用的路径配置（手动切换）
+DATA_PATH = LOCAL_DATA_PATH  # 切换为 CLOUD_DATA_PATH 用于云端
+OUTPUT_DIR = LOCAL_OUTPUT_DIR  # 切换为 CLOUD_OUTPUT_DIR 用于云端
 
 # Column mappings
 COLUMN_MAPPINGS = {

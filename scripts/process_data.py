@@ -24,14 +24,46 @@ warnings.filterwarnings('ignore')
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# 配置
+# ==================== 配置参数 ====================
 TEST_DATE = 20170513
 RANDOM_SEED = 42
-OUTPUT_DIR = '../outputs'  # 云端相对路径
 
-# 云端处理配置
+# ==================== 路径配置 ====================
+# 本地处理路径配置
+LOCAL_DATA_PATH = '/Users/masicheng/Desktop/搜广推/taobao-dssm-project/data'
+LOCAL_OUTPUT_DIR = '/Users/masicheng/Desktop/搜广推/taobao-dssm-project/outputs'
+
+# 云端处理路径配置
+CLOUD_DATA_PATH = './data'
+CLOUD_OUTPUT_DIR = './outputs'
+
+    # ==================== 路径切换说明 ====================
+    # 本地处理（小内存环境）：
+    # DATA_PATH = LOCAL_DATA_PATH
+    # OUTPUT_DIR = LOCAL_OUTPUT_DIR
+    # 同时需要启用本地处理配置：
+    # BEHAVIOR_SAMPLE_RATIO = 0.1
+    # CHUNK_SIZE = 100000
+    
+    # 云端处理（大内存环境）：
+    # DATA_PATH = CLOUD_DATA_PATH
+    # OUTPUT_DIR = CLOUD_OUTPUT_DIR
+    # 同时使用云端处理配置：
+    # BEHAVIOR_SAMPLE_RATIO = 1.0
+    # CHUNK_SIZE = 2000000
+    
+# 当前使用的路径配置（手动切换）
+DATA_PATH = LOCAL_DATA_PATH  # 切换为 CLOUD_DATA_PATH 用于云端
+OUTPUT_DIR = LOCAL_OUTPUT_DIR  # 切换为 CLOUD_OUTPUT_DIR 用于云端
+
+# ==================== 处理配置 ====================
+# 云端处理配置（适合大内存环境）
 BEHAVIOR_SAMPLE_RATIO = 1.0  # 处理100%的行为数据
 CHUNK_SIZE = 2000000  # 200万行一批，适合云端内存
+
+# 本地处理配置（适合小内存环境）
+# BEHAVIOR_SAMPLE_RATIO = 0.1  # 处理10%的行为数据
+# CHUNK_SIZE = 100000  # 10万行一批，适合本地内存
 
 def process_behavior_log(data_path: str, output_dir: str) -> None:
     """处理用户行为日志 - 云端优化版本"""
@@ -265,12 +297,15 @@ def create_complete_dataset(data_path: str, output_dir: str) -> None:
 
 def main():
     """主函数"""
-    data_path = '../data'  # 云端相对路径
+    data_path = DATA_PATH
     output_dir = OUTPUT_DIR
     
-    logger.info("=== 开始完整数据处理（云端版本） ===")
+    logger.info("=== 当前路径配置 ===")
+    logger.info(f"数据路径: {data_path}")
+    logger.info(f"输出路径: {output_dir}")
     logger.info(f"行为数据处理比例: {BEHAVIOR_SAMPLE_RATIO}")
     logger.info(f"Chunk大小: {CHUNK_SIZE}")
+    logger.info("=== 开始完整数据处理 ===")
     
     # 1. 处理用户行为日志
     process_behavior_log(data_path, output_dir)

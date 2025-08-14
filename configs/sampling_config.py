@@ -1,16 +1,26 @@
-# src/config_sampling.py
+# configs/sampling_config.py
 # 采样配置 - 用于本地快速训练
 
 import os
 
-# --- 采样配置 ---
+# ==================== 采样配置 ====================
 SAMPLE_RATIO = 0.1  # 采样10%的数据
 SAMPLE_CHUNKSIZE = 500_000  # 每次处理50万行（减少内存占用）
 SAMPLE_NEG_POS_RATIO = 2  # 减少负样本比例
 
-# --- 文件路径 ---
+# ==================== 路径配置 ====================
 DATASET_FOLDER_NAME = 'ad-displayclick-data-on-taobao-com-cheneymaaa'
-OUTPUT_DIR = '../outputs'  # 输出目录
+
+# 本地路径配置
+LOCAL_OUTPUT_DIR = '/Users/masicheng/Desktop/搜广推/taobao-dssm-project/outputs'
+
+# 云端路径配置
+CLOUD_OUTPUT_DIR = './outputs'
+
+# 当前使用的路径配置（手动切换）
+# 本地训练：使用 LOCAL_OUTPUT_DIR
+# 云端训练：使用 CLOUD_OUTPUT_DIR
+OUTPUT_DIR = LOCAL_OUTPUT_DIR  # 切换为 CLOUD_OUTPUT_DIR 用于云端
 
 # --- 超参数（适合快速训练） ---
 EMBEDDING_DIM = 16

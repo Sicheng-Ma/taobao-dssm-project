@@ -256,9 +256,34 @@ def main():
     SparseFeat = namedtuple('SparseFeat', ['name', 'vocabulary_size', 'embedding_dim'])
     DenseFeat = namedtuple('DenseFeat', ['name', 'dimension'])
     
-    # 设置数据路径
-    DATA_PATH = '../data'
-    OUTPUT_DIR = '../outputs'
+    # ==================== 路径配置 ====================
+    # 本地训练路径配置
+    LOCAL_DATA_PATH = '/Users/masicheng/Desktop/搜广推/taobao-dssm-project/data'
+    LOCAL_OUTPUT_DIR = '/Users/masicheng/Desktop/搜广推/taobao-dssm-project/outputs'
+    
+    # 云端训练路径配置
+    CLOUD_DATA_PATH = './data'
+    CLOUD_OUTPUT_DIR = './outputs'
+    
+    # ==================== 路径切换说明 ====================
+    # 本地快速训练（使用现有采样数据）：
+    # DATA_PATH = LOCAL_DATA_PATH
+    # OUTPUT_DIR = LOCAL_OUTPUT_DIR
+    # 注意：需要先运行 local_sampling.py 生成采样数据
+    
+    # 云端完整训练（处理全部数据）：
+    # DATA_PATH = CLOUD_DATA_PATH  
+    # OUTPUT_DIR = CLOUD_OUTPUT_DIR
+    # 注意：需要先运行 process_data.py 处理完整数据
+    
+    # 当前使用的路径配置（手动切换）
+    DATA_PATH = LOCAL_DATA_PATH  # 切换为 CLOUD_DATA_PATH 用于云端
+    OUTPUT_DIR = LOCAL_OUTPUT_DIR  # 切换为 CLOUD_OUTPUT_DIR 用于云端
+    
+    logger.info(f"=== 当前路径配置 ===")
+    logger.info(f"数据路径: {DATA_PATH}")
+    logger.info(f"输出路径: {OUTPUT_DIR}")
+    logger.info("=== 过拟合修复的Taobao DSSM训练开始 ===")
     
     logger.info("=== 过拟合修复的Taobao DSSM训练开始 ===")
     
